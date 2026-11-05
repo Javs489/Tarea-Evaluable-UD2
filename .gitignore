@@ -1,0 +1,12 @@
+mariadb_data/
+postgres_data/
+data/
+.DS_Store
+Thumbs.db
+ehthumbs.db
+.vscode/
+.idea/
+*.log
+.env
+*.swp
+*.swo
