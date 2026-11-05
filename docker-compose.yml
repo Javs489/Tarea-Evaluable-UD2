@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mariadb_core:
     image: mariadb:latest
@@ -11,12 +9,12 @@ services:
       - "3307:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
-      - ./scripts:/docker-entrypoint-initdb.d 
+      - ./scripts/mariadb:/docker-entrypoint-initdb.d
       - ./config/99-custom.cnf:/etc/mysql/conf.d/99-custom.cnf:ro
     networks:
       fintech_net:
         ipv4_address: 172.18.0.2
-
+ 
   postgres_analitica:
     image: postgres:15-alpine
     container_name: postgres_fintech_analitica
@@ -25,21 +23,23 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres2026
       POSTGRES_DB: finanzas_db
+    command: postgres -c hba_file=/etc/postgresql/pg_hba.conf
     ports:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./scripts:/docker-entrypoint-initdb.d
+      - ./scripts/postgres:/docker-entrypoint-initdb.d
+      - ./pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
     networks:
       fintech_net:
         ipv4_address: 172.18.0.3
-
+ 
 volumes:
   mariadb_data:
     name: mariadb_data
   postgres_data:
     name: postgres_data
-
+ 
 networks:
   fintech_net:
     driver: bridge
